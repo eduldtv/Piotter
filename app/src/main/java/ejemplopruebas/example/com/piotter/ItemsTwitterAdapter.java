@@ -22,6 +22,7 @@ public class ItemsTwitterAdapter extends ArrayAdapter {
     ArrayList<String> listaImagenes;
     ArrayList<String> listaNombres;
     ArrayList<String> listaContenidos;
+    Bitmap logo;
 
     public ItemsTwitterAdapter(Context _context, int _plantillaItemLista, ArrayList<String> _listaImagenes, ArrayList<String> _listaNombres, ArrayList<String> _listaContenidos) {
         super(_context, _plantillaItemLista);
@@ -33,28 +34,61 @@ public class ItemsTwitterAdapter extends ArrayAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(this.context);
 
         View view = inflater.inflate(plantillaItemLista, null);
 
         TextView nombreUsuario = view.findViewById(R.id.nombre);
         TextView contenidoMensaje = view.findViewById(R.id.contenido);
-        ImageView fotoUsuario = view.findViewById(R.id.imagen);
+        final ImageView fotoUsuario = view.findViewById(R.id.imagen);
 
-        TwitterTimeLineActivity twitterTimeLineActivity = new TwitterTimeLineActivity();
 
-        nombreUsuario.setText(twitterTimeLineActivity.timeLineNames.get(position));
-        contenidoMensaje.setText(twitterTimeLineActivity.timeLineContent.get(position));
+        // hacemos un objeto de TwitterTimeLineActivity para poder acceder a los arrays
+        final TwitterTimeLineActivity twitterTimeLineActivity = new TwitterTimeLineActivity();
 
-        try {
-            InputStream is = new URL(twitterTimeLineActivity.timeLineURLImages.get(position)).openStream();
-            Bitmap logo = BitmapFactory.decodeStream(is);
-            fotoUsuario.setImageBitmap(logo);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        // accedemos a cada posicion del array y la metemos en sus respectivos textViews e imageView
+        nombreUsuario.setText(listaNombres.get(position));
+        contenidoMensaje.setText(listaContenidos.get(position));
+
+        // la carga de la imagen la hacemos en un hilo
+
+        new Thread() {
+            public void run() {
+
+
+                try {
+                    InputStream is = new URL(listaImagenes.get(position)).openStream();
+                    logo = BitmapFactory.decodeStream(is);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                // cuando vamos a cargar la imagen lo hacemos con un runOnUiThread
+                twitterTimeLineActivity.runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        fotoUsuario.setImageBitmap(logo);
+
+                    }
+                });
+            }
+        }.start();
+
 
         return view;
+    }
+
+    // Explicación del porqué del Override de esta funcion getCount:
+    // Un ArrayListAdapter siempre se suele crear con un objeto, ejm: ArrayListAdapter<MiObjeto>
+    // haciéndolo así todos sus métodos funcionan como deberían, sin embargo, no lo hemos creado
+    // de esa manera, y el método que usa el Adapter getCount() siempre devuelve 0 y nunca llama
+    // a getView(), por eso Overrideamos getCount()
+    @Override
+    public int getCount() {
+        // se podría usar cualquier otro array, pues son los 3 de la misma longitud
+        return listaImagenes.size();
     }
 }

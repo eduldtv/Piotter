@@ -27,19 +27,19 @@ public class TwitterTimeLineActivity extends AppCompatActivity {
         timeLineContent = intent.getStringArrayListExtra("listaContenidos");
 
 
-        // hilo con runOnUiThread para mostrar los datos en el listView
+        // hilo sin runOnUiThread para mostrar los datos en el listView
         new Thread() {
             public void run() {
-                runOnUiThread(new Runnable() {
+                //runOnUiThread(new Runnable() {
 
-                    @Override
-                    public void run() {
+                    //@Override
+                    //public void run() {
                         ItemsTwitterAdapter adapter = new ItemsTwitterAdapter(TwitterTimeLineActivity.this, R.layout.fila_personalizada, timeLineURLImages, timeLineNames, timeLineContent);
                         ListView androidListView = (ListView) findViewById(R.id.lista);
                         androidListView.setAdapter(adapter);
 
-                    }
-                });
+                    //}
+                //});
             }
         }.start();
 

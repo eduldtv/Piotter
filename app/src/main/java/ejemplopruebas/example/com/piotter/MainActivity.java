@@ -174,7 +174,7 @@ public class MainActivity extends Activity {
                 } else {
                     // EditText is empty
                     Toast.makeText(getApplicationContext(),
-                            "Please enter status message", Toast.LENGTH_SHORT)
+                            "Por favor escribe un mensaje", Toast.LENGTH_SHORT)
                             .show();
                 }
             }
@@ -413,7 +413,7 @@ public class MainActivity extends Activity {
         } else {
             // user already logged into twitter
             Toast.makeText(getApplicationContext(),
-                    "Already Logged into twitter", Toast.LENGTH_LONG).show();
+                    "Ya está autenticado en Twitter", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -485,16 +485,17 @@ public class MainActivity extends Activity {
             // dismiss the dialog after getting all products
             pDialog.dismiss();
             // updating UI from Background Thread
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+            // no hace falta poner runonUIThread, ya que ese método se ejecuta en el hilo principal
+            //runOnUiThread(new Runnable() {
+                //@Override
+                //public void run() {
                     Toast.makeText(getApplicationContext(),
-                            "Status tweeted successfully", Toast.LENGTH_SHORT)
+                            "Mensaje enviado satisfactoriamente", Toast.LENGTH_SHORT)
                             .show();
                     // Clearing EditText field
                     txtUpdate.setText("");
-                }
-            });
+               // }
+            //});
         }
 
     }
