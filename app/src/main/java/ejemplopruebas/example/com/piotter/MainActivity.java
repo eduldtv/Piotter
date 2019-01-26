@@ -191,7 +191,7 @@ public class MainActivity extends Activity {
         botonTimeLine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // para calcular el tiempo que tarda haciendose con un hilo
+                // para calcular el tiempo que se tarda haciéndolo con un hilo
                 long tiempoInicial = System.currentTimeMillis();
 
                 // ArrayLists de imangenes, nombres y contenidos
@@ -202,6 +202,9 @@ public class MainActivity extends Activity {
                 // creamos el hilo que los rellenará
                 new Thread() {
                     public void run() {
+                        // al parecer, no es necesario runOnUiThread() para pasar a otra activity
+                        // con un hilo a secas es posible
+
                         // runOnUiThread(new Runnable() {
 
                         //@Override
@@ -224,17 +227,23 @@ public class MainActivity extends Activity {
                             e.printStackTrace();
                         }
 
-                        // TODO: intent a TwitterTimeLineActivity
-                        // pasandole como EXTRAS los ArrayLists creados, ver si es necesario hacerlo
-                        // con runOnUiThread o no
-                        
+                        // intent a TwitterTimeLineActivity
+                        // pasandole como EXTRAS los ArrayLists creados
+
+                        Intent intent = new Intent(MainActivity.this, TwitterTimeLineActivity.class);
+
+                        intent.putExtra("listaImagenes", timeLineURLImages);
+                        intent.putExtra("listaNombres", timeLineNames);
+                        intent.putExtra("listaContenidos", timeLineContent);
+
+                        startActivity(intent);
 
                         // }
                         // });
                     }
                 }.start();
 
-                // para calcular el tiempo que tarda haciendose con un hilo
+                // para calcular el tiempo que se tarda haciéndolo con un hilo
                 Log.d("tiempoBotonTimeLine", (System.currentTimeMillis() - tiempoInicial) + "");
 
             }
