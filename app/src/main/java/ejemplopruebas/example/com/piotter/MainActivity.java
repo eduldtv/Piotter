@@ -23,7 +23,10 @@ import android.widget.Toast;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
+import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -129,8 +132,6 @@ public class MainActivity extends Activity {
         }
 
 
-
-
         // Shared Preferences
         mSharedPreferences = getApplicationContext().getSharedPreferences(
                 "MyPref", 0);
@@ -179,49 +180,65 @@ public class MainActivity extends Activity {
             }
         });
 
-        // TODO: boton ver últimos tweets
-        // 3 arrays, guardar en un array de strings las imagenes, los nombres y el contenido
-        // y desde la otra actividad solo quedaría utilizar esos objetos. Hacerlo mediante hilos.
-        // cuando el usuario pulse el botón de ver tweets se crearán los tres arrays y se los pasaremos
-        // por EXTRAS  a la nueva actividad
-        // clase executorService que llama a creadorArrayTimeLine que según le pasemos 1, 2 o 3
-        // rellenará un array u otro de imagen, nombre y contenido
 
-        botonTimeLine = (Button)findViewById(R.id.btnVerTimeLine);
+        /** Boton botonTimeLine
+        */
+
+        // se crearán los tres ArrayList de imagenes, nombres y contenidos, los rellenaremos
+        // y se los pasaremos por EXTRAS  a TwitterTimeLineActivity
+
+        botonTimeLine = (Button) findViewById(R.id.btnVerTimeLine);
         botonTimeLine.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // para calcular el tiempo que tarda haciendose con un hilo
+                long tiempoInicial = System.currentTimeMillis();
 
-   /*
-        ExecutorService executer = Executors.newFixedThreadPool(3);
+                // ArrayLists de imangenes, nombres y contenidos
+                final ArrayList<String> timeLineURLImages = new ArrayList<String>();
+                final ArrayList<String> timeLineNames = new ArrayList<String>();
+                final ArrayList<String> timeLineContent = new ArrayList<String>();
 
-        for (int i  = 1; i <= 3; i++) {
-            try {
-                executer.submit(new creadorArrayTimeLine(twitter, i));
-            } catch (TwitterException e) {
-                e.printStackTrace();
-            }
-        }
+                // creamos el hilo que los rellenará
+                new Thread() {
+                    public void run() {
+                        // runOnUiThread(new Runnable() {
 
-        executer.shutdown();
+                        //@Override
+                        //public void run() {
 
-        try {
-            executer.awaitTermination(1, TimeUnit.DAYS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-*/
+                        try {
+                            List<Status> statuses = twitter.getHomeTimeline();
+                            for (Status status : statuses) {
+                                timeLineURLImages.add(status.getUser().get400x400ProfileImageURL());
+                                Log.d("fotosT", status.getUser().get400x400ProfileImageURL());
 
+                                timeLineNames.add(status.getUser().getName());
+                                Log.d("nombresT", status.getUser().getName());
+
+                                timeLineContent.add(status.getText());
+                                Log.d("textosT", status.getText());
+
+                            }
+                        } catch (TwitterException e) {
+                            e.printStackTrace();
+                        }
+
+                        // TODO: intent a TwitterTimeLineActivity
+                        // pasandole como EXTRAS los ArrayLists creados, ver si es necesario hacerlo
+                        // con runOnUiThread o no
+                        
+
+                        // }
+                        // });
+                    }
+                }.start();
+
+                // para calcular el tiempo que tarda haciendose con un hilo
+                Log.d("tiempoBotonTimeLine", (System.currentTimeMillis() - tiempoInicial) + "");
 
             }
         });
-
-
-
-
-
-
-
 
 
         /**
@@ -235,13 +252,6 @@ public class MainActivity extends Activity {
                 logoutFromTwitter();
             }
         });
-
-
-
-
-
-
-
 
 
         /** This if conditions is tested once is
@@ -319,16 +329,12 @@ public class MainActivity extends Activity {
         }
 
 
-
-
-
     } // termina el onCreate
 
 
     // funcion cargar interfaz usuario ya logeado
 
     public void cargarInterfazUsuarioLogeado(User user) {
-
 
 
         btnLoginTwitter = (Button) findViewById(R.id.btnLoginTwitter);
@@ -360,7 +366,7 @@ public class MainActivity extends Activity {
         String username = user.getName();
 
         // Displaying in xml ui
-        lblUserName.setText(Html.fromHtml("<b>Welcome " + username + "</b>"));
+        lblUserName.setText(Html.fromHtml("<b>Bienvenido/a " + username + "</b>"));
 
         // Guardar imagen usuario en un string
         URLImagenUsuario = user.get400x400ProfileImageURL();

@@ -6,32 +6,25 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
-    <!-- Twitter Login Button -->
+    <!-- Imagen usuario -->
 
-    <Button
-        android:id="@+id/btnLoginTwitter"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
 
-        android:layout_marginRight="10dp"
-        android:text="Login with Twitter"
-        android:visibility="visible"/>
-
-    <!-- user name label -->
     <ImageView
         android:id="@+id/imageViewUsuario"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_gravity="center"
+        android:layout_marginTop="25dp"
         android:src="@mipmap/ic_launcher_round"
         android:visibility="gone" />
+
+    <!-- user name label -->
 
     <TextView
         android:id="@+id/lblUserName"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-
+        android:layout_marginTop="25dp"
         android:padding="10dp" />
 
     <!-- label update status -->
@@ -42,7 +35,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:text="Update Status"
+        android:layout_marginTop="25dp"
+        android:text="Nuevo mensaje"
         android:visibility="gone" />
 
     <!-- Tweet EditText -->
@@ -52,6 +46,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
+        android:layout_marginTop="25dp"
         android:visibility="gone" />
 
     <!-- Tweet Button -->
@@ -62,19 +57,23 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:text="Tweet"
+        android:layout_marginTop="50dp"
+        android:text="Publicar mensaje"
         android:visibility="gone" />
 
-    <!-- boton Ver timeLine Twitter  -->
+    <!-- Boton Ver TimeLine Twitter  -->
 
-    <!-- Twitter Logout button -->
     <Button
         android:id="@+id/btnVerTimeLine"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-
-        android:text="Ver últimos tweets"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="50dp"
+        android:text="Ver últimos mensajes"
         android:visibility="gone" />
+
+    <!-- Twitter Logout button -->
 
     <Button
         android:id="@+id/btnLogoutTwitter"
@@ -82,7 +81,20 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:text="Logout from Twitter"
+        android:layout_marginTop="50dp"
+        android:text="Salir de Twitter"
         android:visibility="gone" />
+
+    <!-- Twitter Login Button -->
+
+    <Button
+        android:id="@+id/btnLoginTwitter"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="250dp"
+        android:text="Acceder a Twitter"
+        android:visibility="visible" />
 
 </LinearLayout>
